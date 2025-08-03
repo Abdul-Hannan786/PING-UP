@@ -11,7 +11,7 @@ const Feed = () => {
     setFeeds(dummyPostsData);
     setLoading(false);
   };
-  
+
   useEffect(() => {
     fetchFeeds();
   }, []);
