@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { dummyStoriesData } from "../assets/assets";
 import { Plus } from "lucide-react";
+import moment from "moment";
 
 const StoriesBar = () => {
   const [stories, setStories] = useState([]);
@@ -31,18 +32,37 @@ const StoriesBar = () => {
 
         {/* Story Cards*/}
         {stories.map((story, index) => (
-          <div key={index} className={`relative rounded-lg shadow min-w-30 max-w-30 max-h-40 cursor-pointer hover:shadow-lg transition-all duration-200 bg-gradient-to-b from-indigo-500 to-purple-600 hover:from-indigo-700 hover:to-purple-800 active:scale-95`}>
+          <div
+            key={index}
+            className={`relative rounded-lg shadow min-w-30 max-w-30 max-h-40 cursor-pointer hover:shadow-lg transition-all duration-200 bg-gradient-to-b from-indigo-500 to-purple-600 hover:from-indigo-700 hover:to-purple-800 active:scale-95`}
+          >
             <img
               src={story.user.profile_picture}
               alt="user profile picture"
               className="absolute size-8 top-3 left-3 z-10 rounded-full ring ring-gray-100 shadow"
             />
-            <p className="absolute top-18 left-3 text-white/60 text-sm truncate maxw-24">
+            <p className="absolute top-18 left-3 text-white/60 text-sm truncate max-w-24">
               {story.content}
             </p>
             <p className="text-white absolute bottom-1 right-2 z-10 text-xs">
-              {story.createdAt}
+              {moment(story.createdAt).fromNow()}
             </p>
+            {story.media_type !== "text" && (
+              <div className="absolute inset-0 rounded-lg overflow-hidden bg-black">
+                {story.media_type === "image" ? (
+                  <img
+                    src={story.media_url}
+                    alt="Story Image"
+                    className="h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80"
+                  />
+                ) : (
+                  <video
+                    src={story.media_url}
+                    className="h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80"
+                  />
+                )}
+              </div>
+            )}
           </div>
         ))}
       </div>
