@@ -5,3 +5,7 @@
 * {
   font-family: "Outfit", "Poppins", sans-serif;
 }
+
+.no-scrollbar ::-webkit-scrollbar {
+  display: none;
+}
