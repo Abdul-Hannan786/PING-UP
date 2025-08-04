@@ -43,10 +43,10 @@ const Sidebar = ({ SidebarOpen, setSidebarOpen }) => {
             <p className="text-xs text-gray-500">@{user.username}</p>
           </div>
         </div>
-          <LogOut
-            className="w-5 text-gray-400 hover:text-gray-700 transition cursor-pointer"
-            onClick={signOut}
-          />
+        <LogOut
+          className="w-5 text-gray-400 hover:text-gray-700 transition cursor-pointer"
+          onClick={signOut}
+        />
       </div>
     </div>
   );
