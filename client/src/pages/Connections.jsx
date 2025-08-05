@@ -1,4 +1,4 @@
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   dummyConnectionsData as connections,
   dummyFollowersData as followers,
