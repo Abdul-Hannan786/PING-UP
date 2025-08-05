@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { dummyPostsData, dummyUserData } from "../assets/assets";
 import Loading from "../components/Loading";
 import UserProfileInfo from "../components/UserProfileInfo";
+import PostCard from "../components/PostCard";
 
 const Profile = () => {
   const { profileId } = useParams();
@@ -28,12 +29,49 @@ const Profile = () => {
           {/* Cover Image */}
           <div className="h-40 md:h-56 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200">
             {user.cover_photo && (
-              <img src={user.cover_photo} alt="User's cover photo" className="w-full h-full object-cover" />
+              <img
+                src={user.cover_photo}
+                alt="User's cover photo"
+                className="w-full h-full object-cover"
+              />
             )}
           </div>
 
           {/* User Info */}
-          <UserProfileInfo user={user} posts={posts} setShoeEdit={setActiveTab} profileId={profileId} />
+          <UserProfileInfo
+            user={user}
+            posts={posts}
+            setShoeEdit={setActiveTab}
+            profileId={profileId}
+          />
+        </div>
+
+        {/* Tabs */}
+        <div className="mt-6">
+          <div className="bg-white rounded-xl shadow p-1 flex max-w-md mx-auto">
+            {["posts", "media", "likes"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                  activeTab === tab
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-600 hover:text-gray-900"
+                } `}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Posts */}
+          {activeTab === "posts" && (
+            <div className="mt-6 flex flex-col items-center gap-6">
+              {posts.map((post) => (
+                <PostCard key={post._id} post={post} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
