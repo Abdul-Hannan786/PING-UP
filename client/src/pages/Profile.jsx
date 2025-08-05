@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { dummyPostsData, dummyUserData } from "../assets/assets";
 import Loading from "../components/Loading";
+import UserProfileInfo from "../components/UserProfileInfo";
 
 const Profile = () => {
-  const { profileID } = useParams();
+  const { profileId } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [activeTab, setActiveTab] = useState("posts");
@@ -32,6 +33,7 @@ const Profile = () => {
           </div>
 
           {/* User Info */}
+          <UserProfileInfo user={user} posts={posts} setShoeEdit={setActiveTab} profileId={profileId} />
         </div>
       </div>
     </div>
