@@ -50,7 +50,7 @@ const Discover = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-6 justify-center">
           {users.map((user) => (
             <UserCard user={user} key={user._id} />
           ))}
