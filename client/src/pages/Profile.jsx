@@ -42,7 +42,7 @@ const Profile = () => {
           <UserProfileInfo
             user={user}
             posts={posts}
-            setShoeEdit={setActiveTab}
+            setShowEdit={setShowEdit}
             profileId={profileId}
           />
         </div>
@@ -79,10 +79,15 @@ const Profile = () => {
             <div className="flex flex-wrap mt-6 max-w-6xl">
               {posts
                 .filter((post) => post.image_urls.length > 0)
-                .map((post) => (
-                  <>
+                .map((post, index) => (
+                  <div key={index}>
                     {post.image_urls.map((image, index) => (
-                      <Link target="_blank" to={image} key={index} className="relative group">
+                      <Link
+                        target="_blank"
+                        to={image}
+                        key={index}
+                        className="relative group"
+                      >
                         <img
                           src={image}
                           key={index}
@@ -94,12 +99,15 @@ const Profile = () => {
                         </p>
                       </Link>
                     ))}
-                  </>
+                  </div>
                 ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      {showEdit && <p>Show Profile edit</p>}
     </div>
   ) : (
     <Loading />
