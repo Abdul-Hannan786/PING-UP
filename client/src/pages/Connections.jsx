@@ -39,7 +39,7 @@ const Connections = () => {
         </div>
 
         {/* Connection Stats */}
-        <div className="mb-8 flex flex-wrap gap-6">
+        <div className="mb-8 flex flex-wrap gap-6 justify-center md:justify-start">
           {dataArray.map((item, index) => (
             <div
               key={index}
