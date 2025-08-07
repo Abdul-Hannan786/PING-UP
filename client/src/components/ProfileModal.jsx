@@ -10,6 +10,7 @@ const ProfileModal = ({ setShowEdit }) => {
     location: user.location,
     profile_picture: null,
     full_name: user.full_name,
+    cover_photo: null,
   });
 
   const handleSaveProfile = async (e) => {
@@ -59,6 +60,105 @@ const ProfileModal = ({ setShowEdit }) => {
                   </div>
                 </div>
               </label>
+            </div>
+
+            {/* Cover Photo */}
+            <div className="flex flex-col items-start gap-3">
+              <label
+                htmlFor="cover_photo"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Cover Photo
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="cover_photo"
+                  hidden
+                  className="w-full p-3 border border-gray-200 rounded-lg"
+                  onChange={(e) =>
+                    setEditForm({
+                      ...editForm,
+                      cover_photo: e.target.files[0],
+                    })
+                  }
+                />
+                <div className="relative group/cover">
+                  <img
+                    src={
+                      editForm.cover_photo
+                        ? URL.createObjectURL(editForm.cover_photo)
+                        : user.cover_photo
+                    }
+                    alt="Edited Cover Photo"
+                    className="w-80 h-40 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 object-cover mt-2 rounded-lg"
+                  />
+
+                  <div className="absolute hidden group-hover/cover:flex top-0 left-0 right-0 bottom-0 bg-black/20 rounded-lg items-center justify-center">
+                    <Pencil className="w-5 h-5 text-white" />
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            {/* User Information */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Name
+              </label>
+              <input
+                type="text"
+                className="w-full p-3 border border-gray-200 rounded-lg"
+                placeholder="Please enter your full name"
+                value={editForm.full_name}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, full_name: e.target.value })
+                }
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Username
+              </label>
+              <input
+                type="text"
+                className="w-full p-3 border border-gray-200 rounded-lg"
+                placeholder="Please enter a username"
+                value={editForm.username}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, username: e.target.value })
+                }
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Bio
+              </label>
+              <textarea
+                rows={3}
+                className="w-full p-3 border border-gray-200 rounded-lg resize-none"
+                placeholder="Please enter a short bio"
+                value={editForm.bio}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, bio: e.target.value })
+                }
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Location
+              </label>
+              <input
+                type="text"
+                className="w-full p-3 border border-gray-200 rounded-lg"
+                placeholder="Please enter your location"
+                value={editForm.location}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, location: e.target.value })
+                }
+              />
             </div>
           </form>
         </div>
