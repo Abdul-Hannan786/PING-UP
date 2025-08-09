@@ -1,3 +1,4 @@
+import imagekit from "../configs/imageKit.js";
 import User from "../models/User.js";
 
 // Get User data using userId
@@ -40,6 +41,73 @@ export const updateUserData = async (req, res) => {
       location,
       full_name,
     };
+
+    if (profile) {
+      const buffer = profile.buffer;
+      const response = await imagekit.upload({
+        file: buffer,
+        fileName: profile.originalname,
+      });
+
+      const url = imagekit.url({
+        path: response.filePath,
+        transformation: [
+          { quality: "auto" },
+          { format: "webp" },
+          { width: "512" },
+        ],
+      });
+
+      updateUserData.profile_picture = url;
+    }
+
+    if (cover) {
+      const buffer = cover.buffer;
+      const response = await imagekit.upload({
+        file: buffer,
+        fileName: cover.originalname,
+      });
+
+      const url = imagekit.url({
+        path: response.filePath,
+        transformation: [
+          { quality: "auto" },
+          { format: "webp" },
+          { width: "1280" },
+        ],
+      });
+
+      updateUserData.cover_photo = url;
+    }
+
+    const user = await User.findByIdAndUpdate(userId, updatedData, {
+      new: true,
+    });
+
+    res.json({ success: true, user, message: "Profile updated successfully" });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Find user using username, email, location, name
+export const discoverUsers = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const { input } = req.body;
+
+    const allUsers = await User.find({
+      $or: [
+        { username: new RegExp(input, "i") },
+        { email: new RegExp(input, "i") },
+        { full_name: new RegExp(input, "i") },
+        { location: new RegExp(input, "i") },
+      ],
+    });
+
+    const filteredUsers = allUsers.filter((user) => user._id !== userId);
+    res.json({ success: true, users: filteredUsers });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
