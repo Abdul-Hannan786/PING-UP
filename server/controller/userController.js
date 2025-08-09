@@ -17,15 +17,31 @@ export const getUserData = async (req, res) => {
 };
 
 // Update the user
-// export const updateUserData = async (req, res) => {
-//   try {
-//     const { userId } = req.auth();
-//     const { username, bio, location, full_name } = req.body;
-//     const tempUser = await User.findById(userId);
+export const updateUserData = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const { username, bio, location, full_name } = req.body;
+    const profile = req.files.profile || req.files.profile[0];
+    const cover = req.files.cover || req.files.cover[0];
+    const tempUser = await User.findById(userId);
 
-    
-//   } catch (error) {
-//     console.log(error.message);
-//     res.json({ success: false, message: error.message });
-//   }
-// };
+    !username && (username = tempUser.username);
+
+    if (tempUser.username !== username) {
+      const user = await User.findOne({ username });
+      if (user) {
+        res.json({ success: false, message: "username already taken" });
+      }
+    }
+
+    const updatedData = {
+      username,
+      bio,
+      location,
+      full_name,
+    };
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
