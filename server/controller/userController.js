@@ -5,7 +5,6 @@ import User from "../models/User.js";
 export const getUserData = async (req, res) => {
   try {
     const { userId } = req.auth();
-    console.log(userId)
     const user = await User.findById(userId);
     if (!user) {
       return res.json({ success: false, message: "User not found" });
@@ -22,9 +21,9 @@ export const getUserData = async (req, res) => {
 export const updateUserData = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { username, bio, location, full_name } = req.body;
-    const profile = req.files.profile || req.files.profile[0];
-    const cover = req.files.cover || req.files.cover[0];
+    let { username, bio, location, full_name } = req.body;
+    const profile = req.files.profile && req.files.profile[0];
+    const cover = req.files.cover && req.files.cover[0];
     const tempUser = await User.findById(userId);
 
     !username && (username = tempUser.username);
@@ -32,7 +31,7 @@ export const updateUserData = async (req, res) => {
     if (tempUser.username !== username) {
       const user = await User.findOne({ username });
       if (user) {
-        res.json({ success: false, message: "username already taken" });
+       return res.json({ success: false, message: "username already taken" });
       }
     }
 
@@ -59,7 +58,7 @@ export const updateUserData = async (req, res) => {
         ],
       });
 
-      updateUserData.profile_picture = url;
+      updatedData.profile_picture = url;
     }
 
     if (cover) {
@@ -78,7 +77,7 @@ export const updateUserData = async (req, res) => {
         ],
       });
 
-      updateUserData.cover_photo = url;
+      updatedData.cover_photo = url;
     }
 
     const user = await User.findByIdAndUpdate(userId, updatedData, {
