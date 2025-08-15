@@ -186,7 +186,7 @@ export const sendConnectionRequest = async (req, res) => {
     }
 
     // Check if users are already connected
-    const connection = await Connection.findOne.findOne({
+    const connection = await Connection.findOne({
       $or: [
         { from_user_id: userId, to_user_id: id },
         { from_user_id: id, to_user_id: userId },
@@ -211,6 +211,71 @@ export const sendConnectionRequest = async (req, res) => {
       success: false,
       message: "Connection request pending",
     });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Get User Connection
+export const getUserConnections = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const user = await User.findById(userId).populate(
+      "connections followers, following"
+    );
+
+    const connections = user.connections;
+    const followers = user.followers;
+    const following = user.following;
+
+    const pendingConnections = (
+      await Connection.find({
+        to_user_id: userId,
+        status: "pending",
+      }).populate("from_user_id")
+    ).map((connection) => connection.from_user_id);
+
+    res.json({
+      success: true,
+      connections,
+      followers,
+      following,
+      pendingConnections,
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Function to accecpt connection request
+export const acceptConnectionRequests = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const { id } = req.body;
+
+    const connection = await Connection.findOne({
+      from_user_id: id,
+      to_user_id: userId,
+    });
+
+    if (!connection) {
+      return res.json({ success: false, message: "Connection not found" });
+    }
+
+    const user = await User.findById(userId);
+    user.connections.push(id);
+    await user.save();
+
+    const toUser = await User.findById(id);
+    toUser.connections.push(userId);
+    await toUser.save();
+
+    connection.status = "accepted";
+    await connection.save();
+
+    res.json({ success: true, message: "Connection accepted" });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
