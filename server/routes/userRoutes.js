@@ -1,5 +1,5 @@
 import express from "express";
-import { discoverUsers, followUser, getUserData, unfollowUser, updateUserData } from "../controller/userController.js";
+import { acceptConnectionRequests, discoverUsers, followUser, getUserConnections, getUserData, sendConnectionRequest, unfollowUser, updateUserData } from "../controller/userController.js";
 import { upload } from "../configs/multer.js";
 
 const router = express.Router();
@@ -9,6 +9,9 @@ router.post("/update", upload.fields([{ name: "profile", maxCount: 1 }, { name: 
 router.post("/discover", discoverUsers)
 router.post("/follow", followUser)
 router.post("/unfollow", unfollowUser)
+router.post("/connect", sendConnectionRequest)
+router.post("/accept", acceptConnectionRequests)
+router.get("/connections", getUserConnections)
 
 
 export default router;
