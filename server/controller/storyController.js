@@ -1,5 +1,6 @@
 import imagekit from "../configs/imageKit.js";
 import Story from "../models/Story.js";
+import User from "../models/User.js";
 
 // Function to add user story
 export const addUserStory = async (req, res) => {
@@ -29,6 +30,27 @@ export const addUserStory = async (req, res) => {
     });
 
     res.json({ success: true });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Function to get user stories
+export const getStories = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const user = await User.findById(userId);
+
+    // User connections and followings
+    const userIds = [userId, ...user.connections, ...user.following];
+    const stories = await Story.find({
+      user: { $in: userIds },
+    })
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, stories });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
