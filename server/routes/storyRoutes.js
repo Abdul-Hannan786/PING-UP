@@ -1,7 +1,6 @@
 import express from "express";
 import { upload } from "../configs/multer.js";
-import { addUserStory } from "../controller/storyController.js";
-import { getStories } from "../controller/storyCOntroller";
+import { addUserStory, getStories } from "../controller/storyController.js";
 
 const router = express.Router();
 
