@@ -6,6 +6,7 @@ import { inngest, functions } from "./inngest/index.js";
 import { serve } from "inngest/express";
 import { clerkMiddleware } from "@clerk/express";
 import userRouter from "./routes/userRoutes.js";
+import postRouter from "./routes/postRoutes.js";
 import { protect } from "./middleware/auth.js";
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(cors());
 app.get("/", (req, res) => res.send("Hello World"));
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/user", protect, userRouter);
+app.use("/api/post", protect, postRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
