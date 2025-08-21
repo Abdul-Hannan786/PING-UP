@@ -144,8 +144,7 @@ export const followUser = async (req, res) => {
 };
 
 // Function to unfollow a user
-export const 
-unfollowUser = async (req, res) => {
+export const unfollowUser = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { id } = req.body;
@@ -163,7 +162,7 @@ unfollowUser = async (req, res) => {
     console.log(error.message);
     res.json({ success: false, message: error.message });
   }
-};
+};  
 
 // Function to send connection request
 export const sendConnectionRequest = async (req, res) => {
