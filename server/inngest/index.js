@@ -166,7 +166,7 @@ const sendNotificationOfUnseenMessages = inngest.createFunction(
       unseenCount[message.to_user_id._id] = (unseenCount[message.to_user_id._id] || 0) + 1 ;
     });
 
-    for (const userId of unseenCount) {
+    for (const userId in unseenCount) {
       const user = await User.findById(userId)
 
       const subject = `📬 You have ${unseenCount[userId]} unseen messages`
