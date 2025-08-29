@@ -1,8 +1,8 @@
 import { BadgeCheck, Heart, MessageCircle, Share2 } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
-import { dummyUserData } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const PostCard = ({ post }) => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const PostCard = ({ post }) => {
   );
 
   const [likes, setLikes] = useState(post.likes_count || 0);
-  const currentUser = dummyUserData;
+  const currentUser = useSelector((state) => state.user.value);
 
   const handleLike = async () => {};
 
