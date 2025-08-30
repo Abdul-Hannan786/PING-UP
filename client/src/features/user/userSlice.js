@@ -11,6 +11,8 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async (token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 
+  console.log(data)
+
   return data.success ? data.user : null;
 });
 
@@ -38,7 +40,8 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.fulfilled, (state, action) => {
-        state.value = action.payload;
+        state.value = action.payload;      
+        console.log(action.payload)
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.value = action.payload;
