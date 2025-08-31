@@ -3,14 +3,56 @@ import { useState } from "react";
 import { Image, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { useAuth } from "@clerk/clerk-react";
+import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
+  const { getToken } = useAuth();
+  const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.user.value);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    if (!content && images.length === 0) {
+      return toast.error("Post cannot be empty");
+    }
+
+    setLoading(true);
+    const postType =
+      images.length && content
+        ? "text_with_image"
+        : images.length
+        ? "image"
+        : "text";
+
+    try {
+      const formData = new FormData();
+      formData.append("content", content);
+      formData.append("post_type", postType);
+      images.map((image) => {
+        formData.append("images", image);
+      });
+
+      const { data } = await api.post("/api/post/add", formData, {
+        headers: { Authorization: `Bearer ${await getToken()}` },
+      });
+
+      if (data.success) {
+        navigate("/")
+      } else {
+        console.log(data.message);
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+      throw new Error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
