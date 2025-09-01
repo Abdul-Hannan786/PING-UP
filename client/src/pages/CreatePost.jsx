@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Image, X } from "lucide-react";
 import toast from "react-hot-toast";
