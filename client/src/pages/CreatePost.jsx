@@ -41,7 +41,7 @@ const CreatePost = () => {
       });
 
       if (data.success) {
-        navigate("/")
+        navigate("/")                                                                                       
       } else {
         console.log(data.message);
         throw new Error(data.message);
