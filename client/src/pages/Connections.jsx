@@ -1,10 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {
-  dummyConnectionsData as connections,
-  dummyFollowersData as followers,
-  dummyFollowingData as following,
-  dummyPendingConnectionsData as pendingConnections,
-} from "../assets/assets";
+import { useDispatch, useSelector,  } from "react-redux";
 import {
   MessageSquare,
   UserCheck,
@@ -12,10 +7,19 @@ import {
   UserRoundPen,
   Users,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/clerk-react";
+import { fetchConnections } from "../features/connections/connectionsSlice";
 
 const Connections = () => {
+  const { getToken } = useAuth();
+  const dispatch = useDispatch();
   const [currentTab, setCurrentTab] = useState("Followers");
+  const { connections, pendingConnections, followers, following } = useSelector(
+    (state) => {
+      state.connections;
+    }
+  );
 
   const navigate = useNavigate();
   const dataArray = [
@@ -24,6 +28,12 @@ const Connections = () => {
     { label: "Pending", value: pendingConnections, icon: UserRoundPen },
     { label: "Connections", value: connections, icon: UserPlus },
   ];
+
+  useEffect(() => {
+    getToken().then((token) => {
+      dispatch(fetchConnections(token));
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50">
