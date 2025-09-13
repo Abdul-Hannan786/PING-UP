@@ -159,7 +159,7 @@ export const unfollowUser = async (req, res) => {
     toUser.followers = toUser.followers.filter((user) => user !== userId);
     await toUser.save();
 
-    res.json({ success: true, message: "Now you are following this user" });
+    res.json({ success: true, message: "Now you are not following this user" });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
