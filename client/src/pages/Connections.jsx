@@ -52,7 +52,7 @@ const Connections = () => {
   const acceptConnection = async (userId) => {
     try {
       const { data } = await api.post(
-        "/api/user/accept,",
+        "/api/user/accept",
         { id: userId },
         { headers: { Authorization: `Bearer ${await getToken()}` } }
       );

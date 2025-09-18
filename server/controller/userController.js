@@ -96,6 +96,7 @@ export const updateUserData = async (req, res) => {
 
 // Function to find user using username, email, location, name
 export const discoverUsers = async (req, res) => {
+  
   try {
     const { userId } = req.auth();
     const { input } = req.body;
